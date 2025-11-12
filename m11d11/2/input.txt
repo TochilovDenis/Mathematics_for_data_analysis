@@ -1,0 +1,5 @@
+User1 User2 User3
+Movie1 Movie2 Movie3
+User1 2 Movie1 Movie2
+User2 2 Movie2 Movie3
+User3 1 Movie3
