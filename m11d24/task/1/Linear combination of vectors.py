@@ -1,34 +1,21 @@
 def main():
-
-    # Чтение входных данных
     with open('input.txt', 'r') as f:
-        k = int(f.readline().strip())
-        
-        # Читаем коэффициенты λ
-        coefficients = list(map(float, f.readline().strip().split()))
-        
-        # Читаем векторы
-        vectors = []
-        for _ in range(k):
-            vector = list(map(float, f.readline().strip().split()))
-            vectors.append(vector)
-
-        # Определяем размерность векторов
-        n = len(vectors[0])
-
-        # Инициализируем результирующий вектор нулями
-        result = [0.0] * n
-
-        # Вычисляем линейную комбинацию
+        mas = []
+        k = int(f.readline().strip())        
+        lymd = list(map(float, f.readline().strip().split()))
+               
         for i in range(k):
-            for j in range(n):
-                result[j] += coefficients[i] * vectors[i][j]
+            n = list(map(float, f.readline().strip().split()))
+            if i == 0:
+                mas = [0]*len(n)
+            
+            for y in range(len(n)):
+                mas[y] += n[y] * lymd[i]
 
-        # Форматируем вывод с точностью до 2 знаков после запятой
-        formatted_result = [f'{x:.2f}' for x in result]
+        
+        for var in mas:
+            print(f'{var:.2f}', end= ' ')
 
-        # Выводим результат
-        print(' '.join(formatted_result))
 
 
 if __name__ == "__main__":
