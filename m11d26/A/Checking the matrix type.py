@@ -6,34 +6,26 @@ def main():
             row = list(map(float, f.readline().split()))
             matrix.append(row)
 
-        is_diagonal = True
-        is_upper = True
-        is_lower = True
+        violations = [0, 0, 0]  # [диагональная, верхняя, нижняя]
         
         for i in range(n):
             for j in range(n):
-                # Проверка для диагональной матрицы
-                if i != j and matrix[i][j] != 0:
-                    is_diagonal = False
-                
-                # Проверка для верхнетреугольной матрицы
-                if i > j and matrix[i][j] != 0:
-                    is_upper = False
-                
-                # Проверка для нижнетреугольной матрицы
-                if i < j and matrix[i][j] != 0:
-                    is_lower = False
+                if matrix[i][j] != 0:
+                    if i != j:
+                        violations[0] += 1
+                    if i > j:
+                        violations[1] += 1
+                    if i < j:
+                        violations[2] += 1
         
-        # Определяем приоритет: диагональная > верхнетреугольная/нижнетреугольная
-        if is_diagonal:
+        if violations[0] == 0:
             print("DIAGONAL")
-        elif is_upper:
+        elif violations[1] == 0:
             print("UPPER_TRIANGULAR")
-        elif is_lower:
+        elif violations[2] == 0:
             print("LOWER_TRIANGULAR")
         else:
             print("OTHER")
-        
 
 if __name__ == "__main__":
     main()
