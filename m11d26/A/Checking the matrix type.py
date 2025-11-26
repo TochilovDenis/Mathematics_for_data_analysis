@@ -1,42 +1,39 @@
-import numpy as np
-
-def check_matrix_type_numpy(n, matrix):
-    # Преобразуем в numpy array
-    A = np.array(matrix)
-    
-    # Создаем маски для разных областей матрицы
-    i, j = np.indices(A.shape)
-    
-    # Проверка диагональной: все вне диагонали == 0
-    is_diagonal = np.all(A[i != j] == 0)
-    
-    # Проверка верхнетреугольной: все ниже диагонали == 0
-    is_upper = np.all(A[i > j] == 0)
-    
-    # Проверка нижнетреугольной: все выше диагонали == 0
-    is_lower = np.all(A[i < j] == 0)
-    
-    if is_diagonal:
-        return "DIAGONAL"
-    elif is_upper:
-        return "UPPER_TRIANGULAR"
-    elif is_lower:
-        return "LOWER_TRIANGULAR"
-    else:
-        return "OTHER"
-
 def main():
-    # Чтение входных данных из файла
     with open('input.txt', 'r') as f:
         n = int(f.readline().strip())
         matrix = []
         for _ in range(n):
             row = list(map(float, f.readline().split()))
             matrix.append(row)
-    
-    # Проверка типа матрицы с использованием NumPy
-    result = check_matrix_type_numpy(n, matrix)
-    print(result)
+
+        is_diagonal = True
+        is_upper = True
+        is_lower = True
+        
+        for i in range(n):
+            for j in range(n):
+                # Проверка для диагональной матрицы
+                if i != j and matrix[i][j] != 0:
+                    is_diagonal = False
+                
+                # Проверка для верхнетреугольной матрицы
+                if i > j and matrix[i][j] != 0:
+                    is_upper = False
+                
+                # Проверка для нижнетреугольной матрицы
+                if i < j and matrix[i][j] != 0:
+                    is_lower = False
+        
+        # Определяем приоритет: диагональная > верхнетреугольная/нижнетреугольная
+        if is_diagonal:
+            print("DIAGONAL")
+        elif is_upper:
+            print("UPPER_TRIANGULAR")
+        elif is_lower:
+            print("LOWER_TRIANGULAR")
+        else:
+            print("OTHER")
+        
 
 if __name__ == "__main__":
     main()
