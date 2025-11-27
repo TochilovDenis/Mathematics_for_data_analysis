@@ -1,19 +1,15 @@
 import math
 
-
-def read_matrix(file_path):
-    with open(file_path, 'r') as file:
+def main():
+    # Чтение матрицы из файла
+    with open("input.txt", 'r') as file:
         m, n = map(int, file.readline().split())
         matrix = []
         for _ in range(m):
             row = list(map(float, file.readline().split()))
             matrix.append(row)
     
-    return matrix, m, n
-
-
-def normalize_matrix(matrix, m, n):
-    """Нормализация матрицы по столбцам"""
+    # Нормализация матрицы по столбцам
     normalized = [[0 for _ in range(n)] for _ in range(m)]
     
     for j in range(n):  # для каждого столбца
@@ -38,22 +34,9 @@ def normalize_matrix(matrix, m, n):
             # Отбрасываем дробную часть (приводим к int)
             normalized[i][j] = int(normalized_value)
     
-    return normalized
-
-
-def print_matrix(matrix):
-    """Вывод матрицы"""
-    for row in matrix:
-        print(" ".join(map(str, row)))
-
-
-def main():
-    # Чтение входных данных
-    matrix, m, n = read_matrix("input.txt")
-    # Нормализация матрицы
-    normalized = normalize_matrix(matrix, m, n)
     # Вывод результата
-    print_matrix(normalized)
+    for row in normalized:
+        print(" ".join(map(str, row)))
 
 if __name__ == "__main__":
     main()
