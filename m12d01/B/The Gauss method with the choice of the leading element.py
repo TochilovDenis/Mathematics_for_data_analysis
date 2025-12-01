@@ -1,63 +1,63 @@
-def gauss_max_pivot(A, b):
-    n = len(A)
-    
+def gauss_with_pivot(n, A, b):
+    # Прямой ход
     for k in range(n):
-        # Поиск строки с максимальным элементом в текущем столбце
-        max_index = k
-        max_value = abs(A[k][k])
-        
+        # Находим строку с максимальным по модулю элементом в столбце k
+        max_row = k
+        max_val = abs(A[max_row][k])
         for i in range(k + 1, n):
-            if abs(A[i][k]) > max_value:
-                max_value = abs(A[i][k])
-                max_index = i
+            if abs(A[i][k]) > max_val:
+                max_row = i
+                max_val = abs(A[i][k])
         
-        # Проверка на вырожденность
-        if max_value < 1e-12:
-            return None
+        # Проверяем, что максимальный элемент не равен нулю
+        if max_val == 0:
+            return "NO_SINGLE_SOLUTION"
         
-        # Перестановка строк
-        if max_index != k:
-            A[k], A[max_index] = A[max_index], A[k]
-            b[k], b[max_index] = b[max_index], b[k]
+        # Переставляем строки
+        if max_row != k:
+            A[k], A[max_row] = A[max_row], A[k] 
+            b[k], b[max_row] = b[max_row], b[k]
         
-        # Прямой ход
+        # Прямое исключение
         for i in range(k + 1, n):
             factor = A[i][k] / A[k][k]
-            # Вычитаем из строки i строку k, умноженную на factor
-            A[i][k] = 0  # Явно обнуляем
-            for j in range(k + 1, n):
+            for j in range(k, n):
                 A[i][j] -= factor * A[k][j]
             b[i] -= factor * b[k]
     
-    # Обратная подстановка
+    # Проверяем последний диагональный элемент
+    if A[n-1][n-1] == 0:
+        return "NO_SINGLE_SOLUTION"
+    
+    # Обратный ход
     x = [0.0] * n
     for i in range(n - 1, -1, -1):
-        x[i] = b[i]
+        sum_ax = 0.0
         for j in range(i + 1, n):
-            x[i] -= A[i][j] * x[j]
-        x[i] /= A[i][i]
+            sum_ax += A[i][j] * x[j]
+        x[i] = (b[i] - sum_ax) / A[i][i]
     
-    return x
+    # Округляем до ближайшего целого
+    x_rounded = [round(val) for val in x]
+    return x_rounded
+
 
 def main():
-    with open("input.txt", "r") as f:
-        n = int(f.readline().strip())
-        A = [list(map(float, f.readline().strip().split())) for _ in range(n)]
-        b = list(map(float, f.readline().strip().split()))
-    
-    result = gauss_max_pivot([row[:] for row in A], b[:])
-    
-    if result is None:
-        print("NO_SINGLE_SOLUTION")
-    else:
-        # Округление: для положительных +0.5, для отрицательных -0.5
-        rounded = []
-        for val in result:
-            if val >= 0:
-                rounded.append(str(int(val + 0.5)))
-            else:
-                rounded.append(str(int(val - 0.5)))
-        print(" ".join(rounded))
+    with open("input.txt", encoding="UTF-8") as file_in:
+        lines = file_in.readlines()
+        n = int(lines[0])
+        A = []
+        for i in range(n):
+            A.append(list(map(int, lines[i+1].split())))
+        
+        b = list(map(int, lines[n+1].split()))
+        
+        result = gauss_with_pivot(n, A, b)
+        if result == "NO_SINGLE_SOLUTION":
+            print("NO_SINGLE_SOLUTION")
+        else:
+            print(" ".join(map(str, result)))
+
 
 if __name__ == "__main__":
     main()
